@@ -102,3 +102,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+# 忽略的一些文件
+_user.*
+demo/
