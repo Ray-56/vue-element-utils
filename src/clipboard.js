@@ -16,7 +16,7 @@ const eventUtil = {
         } else {
             element['on' + type] = null;
         }
-    }
+    },
 };
 
 function clipboard(text) {
@@ -25,8 +25,8 @@ function clipboard(text) {
         input.setAttribute('readonly', 'readonly');
         input.setAttribute('value', text);
         document.body.appendChild(input);
-        input.focus();
-        input.setSelectionRange(0, 9999);
+        input.select();
+        input.setSelectionRange(0, text.length);
         if (document.execCommand('copy')) {
             document.execCommand('copy');
             reslove(text);
@@ -38,12 +38,10 @@ function clipboard(text) {
 }
 const $clipboard = clipboard;
 
-export {
-    $clipboard
-}
+export { $clipboard };
 
 export default {
-    bind: function(el, binding, vnode) {
+    bind: function (el, binding, vnode) {
         if (binding.arg === 'success') {
             el._clipboard_success = binding.value;
         } else if (binding.arg === 'error') {
@@ -52,12 +50,23 @@ export default {
             el._clipboard_message = binding.value;
             eventUtil.addHandler(el, 'click', () => {
                 // log(el._clipboard_message);
-                clipboard(el._clipboard_message).then(msg => {
-                    el._clipboard_success(msg);
-                }).catch(err => {
-                    el._clipboard_error(err);
-                });
+                clipboard(el._clipboard_message)
+                    .then((msg) => {
+                        el._clipboard_success(msg);
+                    })
+                    .catch((err) => {
+                        el._clipboard_error(err);
+                    });
             });
+        }
+    },
+    update: function (el, binding) {
+        if (binding.arg === 'success') {
+            el._clipboard_success = binding.value;
+        } else if (binding.arg === 'error') {
+            el._clipboard_error = binding.value;
+        } else {
+            el._clipboard_message = binding.value;
         }
     },
     unbind: function (el, binding) {
@@ -69,5 +78,5 @@ export default {
             delete el._clipboard_message;
             eventUtil.removeHandler(el, 'click');
         }
-    }
-}
+    },
+};
