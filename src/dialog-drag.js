@@ -7,10 +7,22 @@ export default {
         // 获取原有属性 ie dom 元素.currentStyle 火狐谷歌 window.getComputedStyle(dom元素, null);
         const sty = dragDom.currentStyle || window.getComputedStyle(dragDom, null);
 
+        const w = document.documentElement.clientWidth;
+        const h = document.documentElement.clientHeight;
+        
+        const headerWidth = dialogHeaderEl.offsetWidth;
+        const headerHeight = dialogHeaderEl.offsetHeight;
+        const domHeight = dragDom.offsetHeight;
+
         dialogHeaderEl.onmousedown = (e) => {
             // 鼠标按下，计算当前元素距离可视区的距离
             const disX = e.clientX - dialogHeaderEl.offsetLeft;
             const disY = e.clientY - dialogHeaderEl.offsetTop;
+
+            const cursor2left = e.clientX - dialogHeaderEl.getBoundingClientRect().left;
+            const cursor2right = headerWidth - cursor2left;
+            const cursor2top = e.clientY - dragDom.getBoundingClientRect().top;
+            const cursor2bottom = domHeight - cursor2top;
 
             // 获取到的值带 px 正则匹配替换
             let styL, styT;
@@ -26,8 +38,25 @@ export default {
 
             document.onmousemove = function(e) {
                 // 通过事件委托，计算移动的距离
-                const l = e.clientX - disX;
-                const t = e.clientY - disY;
+                let l = e.clientX - disX;
+                let t = e.clientY - disY;
+                   
+                if (e.clientX < headerWidth) {
+                    // 命中左侧极端值区域，l 取极小值
+                    l = l + cursor2left - e.clientX;
+                }
+                if (e.clientX + cursor2right > w) {
+                    // 命中右侧极端值区域，l 取极大值
+                    l = l - (e.clientX + cursor2right - w);
+                }  
+                if (e.clientY < headerHeight) {
+                    // 命中上侧极端值区域, t 取极小值
+                    t = t + cursor2top - e.clientY;
+                }
+                if (e.clientY + cursor2bottom > h) {
+                    // 命中下侧极端值区域, t 取极大值
+                    t = t - (e.clientY + cursor2bottom - h);
+                }
 
                 // 移动当前元素
                 dragDom.style.left = `${l + styL}px`;
