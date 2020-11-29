@@ -12,6 +12,7 @@ Custom Directives
 - `v-select-scroll`: Select 组件监听滚动，以便做懒加载
 - `v-dialog-drag`: Dialog 组件拖拽任意位置
 - `v-dialog-drag-width`: Dialog 组件拖拽宽度
+- `v-dialog-corner`: Dialog 组件右下角拖拽宽度高度
 - `v-clipboard`: 剪切板指令，类似 `复制`、`Ctrl + C`等复制文本至剪切板
 
 提供原型方法：
@@ -154,6 +155,32 @@ export default {
     }
 };
 </script>
+```
+
+## v-dialog-corner
+
+![v-dialog-corner.gif](https://raw.githubusercontent.com/Ray-56/image-service/master/picgo20201129/225645.gif)
+
+```vue
+<template>
+    <div>
+        <el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button>
+
+        <el-dialog
+            title="提示"
+            :visible.sync="dialogVisible"
+            width="30%"
+            :close-on-click-modal="false"
+            v-el-dialog-corner
+        >
+            <span>右下角可拖拽宽高变化</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button>取 消</el-button>
+                <el-button type="primary">确 定</el-button>
+            </span>
+        </el-dialog>
+    </div>
+</template>
 ```
 
 ## 剪切板clipboard

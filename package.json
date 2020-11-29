@@ -1,6 +1,6 @@
 {
   "name": "vue-element-utils",
-  "version": "0.1.2",
+  "version": "0.2.1",
   "description": "custom directive utils for element-ui",
   "main": "dist/vue-element-utils.js",
   "scripts": {
@@ -10,7 +10,11 @@
     "start": "yarn run clean && cross-env NODE_ENV=development rollup -w -c build/rollup.config.js",
     "build": "yarn run clean && cross-env NODE_ENV=production rollup -c build/rollup.config.js"
   },
-  "keywords": ["Vue", "element-ui", "custom-directives"],
+  "keywords": [
+    "Vue",
+    "element-ui",
+    "custom-directives"
+  ],
   "repository": "https://github.com/Ray-56/vue-element-utils.git",
   "author": "ray <782216385@qq.com>",
   "license": "MIT",
