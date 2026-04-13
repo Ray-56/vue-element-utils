@@ -4,7 +4,7 @@ export default {
         const dragDom = el.querySelector('.el-dialog');
         dialogHeaderEl.style.cssText += ';cursor:move;';
 
-        // 获取原有属性 ie dom 元素.currentStyle 火狐谷歌 window.getComputedStyle(dom元素, null);
+        // Read the current position styles across browsers.
         const sty = dragDom.currentStyle || window.getComputedStyle(dragDom, null);
 
         const w = document.documentElement.clientWidth;
@@ -15,7 +15,7 @@ export default {
         const domHeight = dragDom.offsetHeight;
 
         dialogHeaderEl.onmousedown = (e) => {
-            // 鼠标按下，计算当前元素距离可视区的距离
+            // Measure the pointer offset when dragging starts.
             const disX = e.clientX - dialogHeaderEl.offsetLeft;
             const disY = e.clientY - dialogHeaderEl.offsetTop;
 
@@ -24,10 +24,10 @@ export default {
             const cursor2top = e.clientY - dragDom.getBoundingClientRect().top;
             const cursor2bottom = domHeight - cursor2top;
 
-            // 获取到的值带 px 正则匹配替换
+            // Normalize pixel-based position values.
             let styL, styT;
 
-            // 注意在 ie 中 第一次获取到的值为组件自带 50% 移动之后赋值为 px
+            // Element UI may start with percentage-based positioning.
             if (sty.left.includes('%')) {
                 styL = +document.body.clientWidth * (+sty.left.replace(/\%/g, '') / 100);
                 styT = +document.body.clientHeight * (+sty.top.replace(/\%/g, '') / 100);
@@ -37,32 +37,32 @@ export default {
             }
 
             document.onmousemove = function(e) {
-                // 通过事件委托，计算移动的距离
+                // Compute the movement delta from the initial pointer position.
                 let l = e.clientX - disX;
                 let t = e.clientY - disY;
                    
                 if (e.clientX < headerWidth) {
-                    // 命中左侧极端值区域，l 取极小值
+                    // Clamp to the left edge of the viewport.
                     l = l + cursor2left - e.clientX;
                 }
                 if (e.clientX + cursor2right > w) {
-                    // 命中右侧极端值区域，l 取极大值
+                    // Clamp to the right edge of the viewport.
                     l = l - (e.clientX + cursor2right - w);
                 }  
                 if (e.clientY < headerHeight) {
-                    // 命中上侧极端值区域, t 取极小值
+                    // Clamp to the top edge of the viewport.
                     t = t + cursor2top - e.clientY;
                 }
                 if (e.clientY + cursor2bottom > h) {
-                    // 命中下侧极端值区域, t 取极大值
+                    // Clamp to the bottom edge of the viewport.
                     t = t - (e.clientY + cursor2bottom - h);
                 }
 
-                // 移动当前元素
+                // Move the dialog.
                 dragDom.style.left = `${l + styL}px`;
                 dragDom.style.top = `${t + styT}px`;
 
-                //将此时的位置传出去
+                // Expose the current position if needed.
                 //binding.value({x:e.pageX,y:e.pageY})
             };
 

@@ -31,7 +31,7 @@ function clipboard(text) {
             document.execCommand('copy');
             reslove(text);
         } else {
-            reject(new Error('复制失败'));
+            reject(new Error('Failed to copy'));
         }
         document.body.removeChild(input);
     });

@@ -1,9 +1,9 @@
-# 需要完善的功能
+# Planned Improvements
 
-- [ ] 代码优化
-- [ ] 兼容 Element-plus
+- [ ] Optimize the codebase
+- [ ] Add Element Plus compatibility
 
-## 拖拽 Dialog
+## Dialog Dragging
 
-- [ ] 拖拽弹窗区域限制
-- [ ] 关闭后，再次打开弹窗的位置
+- [ ] Limit the draggable area of the dialog
+- [ ] Preserve the dialog position after closing and reopening

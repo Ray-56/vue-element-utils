@@ -103,6 +103,6 @@ typings/
 # TernJS port file
 .tern-port
 
-# 忽略的一些文件
+# Ignored local project files
 _user.*
 demo/

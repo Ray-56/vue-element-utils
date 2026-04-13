@@ -3,9 +3,9 @@
         [
             "@babel/preset-env",
             {
-                // 避免转换成 CommonJS
+                // Keep ES modules for Rollup.
                 "modules": false,
-                // 使用 loose 模式，避免产生副作用
+                // Use loose mode to avoid extra helper output.
                 "loose": true
             }
         ]

@@ -5,7 +5,7 @@ import babel from "rollup-plugin-babel";
 import { terser } from "rollup-plugin-terser";
 import { name, version, author } from "../package.json";
 
-// banner
+// Banner
 const banner =
     `${"/*!\n" + " * "}${name}.js v${version}\n` +
     ` * (c) 2020-${new Date().getFullYear()} ${author}\n` +
@@ -22,7 +22,7 @@ export default [
         //     name: "element-custom-directive-utils",
         // },
         output: [
-            // umd development version with sourcemap
+            // UMD development build with a sourcemap.
             {
                 file: `dist/${name}.js`,
                 format: "umd",
@@ -31,13 +31,13 @@ export default [
                 banner,
                 sourcemap: true,
             },
-            // cjs and esm version
+            // CJS and ESM build targets.
             // {
             //     file: `dist/${name}.cjs.js`,
             //     format: "cjs",
             //     banner,
             // },
-            // cjs and esm version
+            // ESM build target.
             {
                 file: `dist/${name}.esm.js`,
                 format: "es",
@@ -47,7 +47,7 @@ export default [
         plugins: [
             terser(),
             babel({
-                exclude: "node_modules/**", // 只编译我们的源代码
+                exclude: "node_modules/**", // Compile only project source files.
             }),
         ],
     },
@@ -55,7 +55,7 @@ export default [
     {
         input: "src/main.js",
         output: [
-            // umd with compress version
+            // Compressed UMD build.
             {
                 file: `dist/${name}.min.js`,
                 format: "umd",
@@ -66,7 +66,7 @@ export default [
         plugins: [
             terser(),
             babel({
-                exclude: "node_modules/**", // 只编译我们的源代码
+                exclude: "node_modules/**", // Compile only project source files.
             }),
         ],
     },

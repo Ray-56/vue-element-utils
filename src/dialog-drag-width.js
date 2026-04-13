@@ -7,16 +7,16 @@ export default {
         lineEl.addEventListener(
             'mousedown',
             function(e) {
-                // 鼠标按下，计算当前元素距离可视区的距离
+                // Measure the pointer offset when dragging starts.
                 const disX = e.clientX - el.offsetLeft;
 
-                // 当前宽度
+                // Store the current width.
                 const curWidth = dragDom.offsetWidth;
 
                 document.onmousemove = function(e) {
-                    e.preventDefault(); // 移动时禁用默认事件
+                    e.preventDefault(); // Disable default behavior while dragging.
 
-                    // 通过事件委托，计算移动的距离
+                    // Compute the horizontal drag distance.
                     const l = e.clientX - disX;
                     
                     dragDom.style.width = `${curWidth + l}px`;

@@ -1,23 +1,22 @@
 # vue-element-utils
 
-> vue 使用 element-ui 项目的一些工具方法、拓展自定义指令等
+> Utility directives and helpers for Vue projects built with Element UI.
 
-Custom Directives 
-对 element-ui 的一些组件做的拓展自定义指令工具
+Custom directives that extend several Element UI components.
 
-使用`yarn`包管理
+This project uses `yarn`.
 
-提供指令：
+Included directives:
 
-- `v-select-scroll`: Select 组件监听滚动，以便做懒加载
-- `v-dialog-drag`: Dialog 组件拖拽任意位置
-- `v-dialog-drag-width`: Dialog 组件拖拽宽度
-- `v-dialog-corner`: Dialog 组件右下角拖拽宽度高度
-- `v-clipboard`: 剪切板指令，类似 `复制`、`Ctrl + C`等复制文本至剪切板
+- `v-el-select-scroll`: Listen for scroll events in an `el-select` dropdown to support lazy loading
+- `v-el-dialog-drag`: Drag a Dialog by its header
+- `v-el-dialog-drag-width`: Resize a Dialog horizontally
+- `v-el-dialog-corner`: Resize a Dialog from the lower-right corner
+- `v-clipboard`: Copy text to the clipboard, similar to `Ctrl + C`
 
-提供原型方法：
+Included prototype method:
 
-- `$clipboard()`: 剪切板方法，类似 `复制`、`Ctrl + C`等复制文本至剪切板
+- `$clipboard(text)`: Copy text to the clipboard programmatically
 
 ## How to use
 
@@ -26,7 +25,7 @@ yarn add vue-element-utils
 npm install vue-element-utils
 ```
 
-入口文件引入：
+Import it in your entry file:
 
 ```js
 import elementUtils from 'vue-element-utils'
@@ -40,7 +39,7 @@ Vue.use(elementUtils);
 
 ```vue
 <template>
-    <el-select v-model="value" placeholder="请选择" v-el-select-scroll="selectScroll">
+    <el-select v-model="value" placeholder="Please select" v-el-select-scroll="selectScroll">
         <el-option
             v-for="item in options"
             :key="item.value"
@@ -56,8 +55,8 @@ function createOptions(len, start = 0) {
     return Array(len)
         .fill(0)
         .map((_, index) => ({
-            value: `选项${start + index}`,
-            label: `我是${start + index}`
+            value: `option-${start + index}`,
+            label: `Option ${start + index}`
         }));
 }
 
@@ -75,8 +74,8 @@ export default {
     methods: {
         selectScroll() {
             console.log('selectScroll');
-            // Select 滚动到底部 执行该方法
-            // 这里可以做一些懒加载之类的事情，eg：
+            // This method runs when the Select dropdown reaches the bottom.
+            // Use it to load the next page of options.
             this.pageIndex++;
             this.options.push(...createOptions(10, 10 * this.pageIndex));
         },
@@ -92,19 +91,19 @@ export default {
 ```vue
 <template>
     <section>
-        <el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button>
+        <el-button type="text" @click="dialogVisible = true">Open Dialog</el-button>
 
         <el-dialog
-            title="提示"
+            title="Notice"
             :visible.sync="dialogVisible"
             width="30%"
             :close-on-click-modal="false"
             v-el-dialog-drag
         >
-            <span>这是一段信息</span>
+            <span>This is a message.</span>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                <el-button @click="dialogVisible = false">Cancel</el-button>
+                <el-button type="primary" @click="dialogVisible = false">Confirm</el-button>
             </span>
         </el-dialog>
     </section>
@@ -128,19 +127,19 @@ export default {
 ```vue
 <template>
     <section>
-        <el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button>
+        <el-button type="text" @click="dialogVisible = true">Open Dialog</el-button>
 
         <el-dialog
-            title="提示"
+            title="Notice"
             :visible.sync="dialogVisible"
             width="30%"
             :close-on-click-modal="false"
             v-el-dialog-drag-width
         >
-            <span>这是一段信息</span>
+            <span>This is a message.</span>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                <el-button @click="dialogVisible = false">Cancel</el-button>
+                <el-button type="primary" @click="dialogVisible = false">Confirm</el-button>
             </span>
         </el-dialog>
     </section>
@@ -164,31 +163,31 @@ export default {
 ```vue
 <template>
     <div>
-        <el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button>
+        <el-button type="text" @click="dialogVisible = true">Open Dialog</el-button>
 
         <el-dialog
-            title="提示"
+            title="Notice"
             :visible.sync="dialogVisible"
             width="30%"
             :close-on-click-modal="false"
             v-el-dialog-corner
         >
-            <span>右下角可拖拽宽高变化</span>
+            <span>Drag from the lower-right corner to resize.</span>
             <span slot="footer" class="dialog-footer">
-                <el-button>取 消</el-button>
-                <el-button type="primary">确 定</el-button>
+                <el-button>Cancel</el-button>
+                <el-button type="primary">Confirm</el-button>
             </span>
         </el-dialog>
     </div>
 </template>
 ```
 
-## 剪切板clipboard
+## Clipboard
 
 ![](https://raw.githubusercontent.com/guokangf/image-service/master/picgo/20200608/152702.gif)
 
-- 方法1：`v-clipboard`指令
-- 方法2：`$clipboard(string)`方法
+- Method 1: `v-clipboard` directive
+- Method 2: `$clipboard(string)` helper
 
 ```vue
 <template>
@@ -196,11 +195,11 @@ export default {
         <el-button
             v-clipboard:success="clipboardSuccess"
             v-clipboard:error="clipboardError"
-            v-clipboard="'我是被复制的内容1'"
+            v-clipboard="'Copied content 1'"
         >
-            方法1
+            Method 1
         </el-button>
-        <el-button @click="handleCopy">方法2</el-button>
+        <el-button @click="handleCopy">Method 2</el-button>
     </div>
 </template>
 
@@ -208,7 +207,7 @@ export default {
 export default {
     methods: {
         handleCopy() {
-            this.$clipboard('我是被复制的内容2').then(res => {
+            this.$clipboard('Copied content 2').then(res => {
                 console.log(res);
             });
         },

@@ -1,4 +1,4 @@
-// 右下角拖拽宽高
+// Resize from the lower-right corner.
 export default {
     bind(el) {
         const dragDom = el.querySelector('.el-dialog');
@@ -8,18 +8,18 @@ export default {
         lineEl.addEventListener(
             'mousedown',
             function(e) {
-                // 鼠标按下，计算当前元素距离可视区的距离
+                // Measure the pointer offset when dragging starts.
                 const disX = e.clientX - el.offsetLeft;
                 const disY = e.clientY - el.offsetTop;
 
-                // 当前宽度 高度
+                // Store the current width and height.
                 const curWidth = dragDom.offsetWidth;
                 const curHeight = dragDom.offsetHeight;
 
                 document.onmousemove = function(e) {
-                    e.preventDefault(); // 移动时禁用默认事件
+                    e.preventDefault(); // Disable default behavior while dragging.
 
-                    // 通过事件委托，计算移动的距离
+                    // Compute the drag distance on both axes.
                     const xl = e.clientX - disX;
                     const yl = e.clientY - disY
                     
